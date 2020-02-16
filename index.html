@@ -4,37 +4,55 @@
         <meta charset="UTF-8">
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.js"></script>
-        <script type="text/javascript" src="js/expert-list.js"></script>
+        <script type="text/javascript" src="js/expert.js"></script>
         <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
-
+        <link rel="stylesheet" href="css/main.css" type="text/css">
     </head>
     <body>
-        <div class="container">
+        <div class="container content-block">
             <div id="list-creation">
                 <h1 style="text-align: center;">Выбор профессии</h1>
-                <div style="margin-top: 20px">
-                    <h3>Загрузите базу знаний</h3>
+                <div class="content-block" id="opening">
+                    <div style="margin-top: 20px">
+                        <h3>Загрузите базу знаний</h3>
+                    </div>
+                    <div style="margin-top: 20px">
+                        <label for="#get_the_file">Выберите файл</label>
+                        <input class="form-control" type="file" id="get_the_file">
+                        <textarea class="form-control" type="text" hidden id="database"></textarea>
+                    </div>
+                    <div style="margin-top: 20px">
+                        <button class="btn btn-secondary" onclick="openFile()">Открыть</button>
+                    </div>
                 </div>
-                <div style="margin-top: 20px">
-                    <label for="#get_the_file">Выберите файл</label>
-                    <input class="form-control" type="file" id="get_the_file">
-                </div>
-                <div style="margin-top: 20px">
-                    <button class="btn btn-secondary" onclick="openFile()">Открыть</button>
-                </div>
-                <div class="" id="questions">
+                <div style="display: none;" class="content-block" id="questions">
                     <div style="margin-top: 20px">
                         <h3 id="questionText" style="text-align: center;">Вопрос</h3>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div style="margin-top: 10px">
-                                <button  class="btn btn-success btn-lg btn-block" onclick="" style="margin-top: 20px">Да</button>
+                                <button  class="btn btn-success btn-lg btn-block" onclick="checkAnswer()" data-answer=1 style="margin-top: 20px">Да</button>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div style="margin-top: 10px">
-                                <button class="btn btn-danger btn-lg btn-block" onclick="" style="margin-top: 20px">Нет</button>
+                                <button class="btn btn-danger btn-lg btn-block" onclick="checkAnswer()" data-answer=0 style="margin-top: 20px">Нет</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-block" id="result" style="display: none;">
+                    <h3 id="resultText" style="text-align: center;"></h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="margin-top: 10px">
+                                <button  class="btn btn-warning btn-lg btn-block" onclick="reset()" data-answer=1 style="margin-top: 20px">Начать сначала</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="margin-top: 10px">
+                                <button class="btn btn-primary btn-lg btn-block" onclick="explain()" data-answer=0 style="margin-top: 20px">Объяснить</button>
                             </div>
                         </div>
                     </div>
