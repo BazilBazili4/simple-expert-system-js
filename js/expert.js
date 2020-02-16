@@ -41,17 +41,33 @@ function setQuestionText(questionText) {
     question.innerHTML = questionText;
 }
 
+function isTerminalRule(ruleName) {
+    ruleName = ruleName.split('-')[0];
+    return ruleName == 'результат';
+}
+
+function getResult(ruleName) {
+    ruleName = ruleName.split('-')[1];
+    return ruleName;
+}
+
 function checkAnswer() {
     theTarget = event.target;
-    answer = theTarget.getAttribute('data-answer');
+    let answer = theTarget.getAttribute('data-answer');
+    let nextRuleName = '';
     if (answer == 1) {
         nextRuleName = getNextYesRuleName(currentRule);
-        currentRule = findRuleByName(knowledgeBase, nextRuleName);
-        setQuestionText(getQuestionText(currentRule));
+
     } else {
         nextRuleName = getNextNoRuleName(currentRule);
+    }
+    if (isTerminalRule(nextRuleName)) {
+        setResultText(getResult(nextRuleName));
+        hideQuestions();
+        showResult();
+    } else {
         currentRule = findRuleByName(knowledgeBase, nextRuleName);
-        setQuestionText(getQuestionText(currentRule));
+        setQuestionText(getQuestionText(currentRule));   
     }
 }
 
@@ -121,11 +137,46 @@ function CSVToArray( strData, strDelimiter ){
     return( arrData );
 }
 
+function showQuestions() {
+    let questions = document.getElementById('questions');
+    questions.setAttribute('style', 'display: block');
+}
+function hideQuestions() {
+    let questions = document.getElementById('questions');
+    questions.setAttribute('style', 'display: none');
+}
+function setResultText(text) {
+    let question = document.getElementById('resultText');
+    question.innerHTML = text;
+}
+function showResult() {
+    let questions = document.getElementById('result');
+    questions.setAttribute('style', 'display: block');
+}
+function hideResult() {
+    let questions = document.getElementById('result');
+    questions.setAttribute('style', 'display: none');
+}
+function hideOpening() {
+    let questions = document.getElementById('opening');
+    questions.setAttribute('style', 'display: none');   
+}
+
+function reset() {
+    currentRule = getInitialRule(knowledgeBase);
+    hideResult();
+    showQuestions();
+    setQuestionText(getQuestionText(currentRule));
+
+}
+
 function setDatabase(text) {
     let database = document.getElementById('database');
     database.value = text;
     knowledgeBase = CSVToArray(text);
     currentRule = getInitialRule(knowledgeBase);
+    hideOpening();
+    showQuestions();
     setQuestionText(getQuestionText(currentRule));
 }
 
