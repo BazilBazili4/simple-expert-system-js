@@ -1,6 +1,7 @@
 
 let knowledgeBase;
 let currentRule;
+let answers = [];
 
 
 function getKnowlegeArray() {
@@ -36,6 +37,20 @@ function findRuleByName(knowledgeBase, name) {
     );
 }
 
+function setAnswer(question, answer) {
+    if (answer == 1) {
+        answer = "Да";
+    } else if (answer == 'Результат') {
+        answer = "Результат";
+    } else {
+        answer = "Нет";        
+    }
+    return {
+        question: question,
+        ans: answer
+    };
+}
+
 function setQuestionText(questionText) {
     let question = document.getElementById('questionText');
     question.innerHTML = questionText;
@@ -54,6 +69,7 @@ function getResult(ruleName) {
 function checkAnswer() {
     theTarget = event.target;
     let answer = theTarget.getAttribute('data-answer');
+    let currentQuestion = getQuestionText(currentRule);
     let nextRuleName = '';
     if (answer == 1) {
         nextRuleName = getNextYesRuleName(currentRule);
@@ -61,16 +77,49 @@ function checkAnswer() {
     } else {
         nextRuleName = getNextNoRuleName(currentRule);
     }
+    answers.push(setAnswer(currentQuestion, answer));
     if (isTerminalRule(nextRuleName)) {
         setResultText(getResult(nextRuleName));
         hideQuestions();
         showResult();
+        answers.push(setAnswer(getResult(nextRuleName), 'Результат'));
     } else {
         currentRule = findRuleByName(knowledgeBase, nextRuleName);
         setQuestionText(getQuestionText(currentRule));   
     }
 }
 
+function createAnswersArray(answersChain) {
+    return answersChain.map(
+        (answer) => {
+            return createExplainMessage(answer.question, answer.ans);
+        }
+    );
+}
+
+function setAnswersHtmlList(questionsArray) {
+    let list = document.createElement('ul');
+    list.setAttribute('class', 'list-group list-group-flush');
+    questionsArray.forEach(
+        (question) => {
+            let item = document.createElement('li');
+            item.setAttribute('class', 'list-group-item');
+            item.appendChild(document.createTextNode(question));
+            list.appendChild(item);
+        }
+    );
+    return list;
+}
+
+function explain() {
+    let answersArray = createAnswersArray(answers);
+    let explainBlock = document.getElementById('explaining');
+    explainBlock.appendChild(setAnswersHtmlList(answersArray));
+    answers = [];
+}
+function createExplainMessage(question, answer) {
+    return question + " => " + answer;
+}
 
 
 function CSVToArray( strData, strDelimiter ){
@@ -167,6 +216,8 @@ function reset() {
     hideResult();
     showQuestions();
     setQuestionText(getQuestionText(currentRule));
+    let explainBlock = document.getElementById('explaining');
+    explainBlock.innerHTML = '';
 
 }
 
