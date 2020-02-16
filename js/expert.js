@@ -1,13 +1,61 @@
-function openDataBase() {
-    let fileForm = document.getElementById('get_the_file');
-    let dataBase = openFile(fileForm);
-}
+
+let knowledgeBase;
+let currentRule;
+
 
 function getKnowlegeArray() {
     let database = document.getElementById('database');
-    let knowlegeBase = CSVToArray(database.value);   
-    console.log(knowlegeBase);
+    knowlegeBase = CSVToArray(database.value); 
+    currentRule = getInitialRule(knowledgeBase);
+    console.log(currentRule);
 }
+
+function getInitialRule(knowlegeBase) {
+    return knowlegeBase[0];
+}
+
+function getRuleName(knowledgeRule) {
+    return knowledgeRule[0];
+}
+
+function getQuestionText(knowledgeRule) {
+    return knowledgeRule[1];
+}
+function getNextYesRuleName(knowledgeRule) {
+    return knowledgeRule[2];
+}
+function getNextNoRuleName(knowledgeRule) {
+    return knowledgeRule[3];
+}
+
+function findRuleByName(knowledgeBase, name) {
+    return knowledgeBase.find(
+        (rule) => {
+            return getRuleName(rule) == name;
+        }
+    );
+}
+
+function setQuestionText(questionText) {
+    let question = document.getElementById('questionText');
+    question.innerHTML = questionText;
+}
+
+function checkAnswer() {
+    theTarget = event.target;
+    answer = theTarget.getAttribute('data-answer');
+    if (answer == 1) {
+        nextRuleName = getNextYesRuleName(currentRule);
+        currentRule = findRuleByName(knowledgeBase, nextRuleName);
+        setQuestionText(getQuestionText(currentRule));
+    } else {
+        nextRuleName = getNextNoRuleName(currentRule);
+        currentRule = findRuleByName(knowledgeBase, nextRuleName);
+        setQuestionText(getQuestionText(currentRule));
+    }
+}
+
+
 
 function CSVToArray( strData, strDelimiter ){
     // Check to see if the delimiter is defined. If not,
@@ -76,9 +124,13 @@ function CSVToArray( strData, strDelimiter ){
 function setDatabase(text) {
     let database = document.getElementById('database');
     database.value = text;
+    knowledgeBase = CSVToArray(text);
+    currentRule = getInitialRule(knowledgeBase);
+    setQuestionText(getQuestionText(currentRule));
 }
 
-function openFile(fileForm) {
+function openFile() {
+    let fileForm = document.getElementById('get_the_file');
     var file_to_read = fileForm.files[0];
     var fileread = new FileReader();
     var data;
