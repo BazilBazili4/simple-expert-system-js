@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="js/expert-list.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
+
+    </head>
+    <body>
+        <div class="container">
+            <div id="list-creation">
+                <h1 style="text-align: center;">Выбор профессии</h1>
+                <div style="margin-top: 20px">
+                    <h3>Загрузите базу знаний</h3>
+                </div>
+                <div style="margin-top: 20px">
+                    <label for="#get_the_file">Выберите файл</label>
+                    <input class="form-control" type="file" id="get_the_file">
+                </div>
+                <div style="margin-top: 20px">
+                    <button class="btn btn-secondary" onclick="openFile()">Открыть</button>
+                </div>
+                <div class="" id="questions">
+                    <div style="margin-top: 20px">
+                        <h3 id="questionText" style="text-align: center;">Вопрос</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="margin-top: 10px">
+                                <button  class="btn btn-success btn-lg btn-block" onclick="" style="margin-top: 20px">Да</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="margin-top: 10px">
+                                <button class="btn btn-danger btn-lg btn-block" onclick="" style="margin-top: 20px">Нет</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+            </div>              
+        </div>
+    </body>
+</html>
